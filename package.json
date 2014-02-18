@@ -1,0 +1,27 @@
+{
+    "name": "exectimer",
+    "version": "0.1.0",
+    "description": "Very simple module to calculate block execution time.",
+    "keywords": ["time", "profiler", "execution"],
+    "homepage": "https://github.com/alexandrusavin/exectimer",
+    "bugs": "https://github.com/alexandrusavin/exectimer/issues",
+    "author": {
+        "name": "Alexandru Savin",
+        "email": "alexandrusavin@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/alexandrusavin/exectimer.git"
+    },
+    "main": "./index",
+    "scripts": {
+        "test": "node test.js",
+        "install": "node-gyp rebuild"
+    },
+    "engines": {
+        "node": ">= 0.8.0"
+    },
+    "dependencies": {
+        "microtime": "0.5.1"
+    },
+}
