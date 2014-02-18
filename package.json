@@ -23,5 +23,5 @@
     },
     "dependencies": {
         "microtime": "0.5.1"
-    },
+    }
 }
