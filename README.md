@@ -1,11 +1,10 @@
-Description
-===========
+# Description
 
 Very simple nodejs module that can be used to track the time that diferent execution blocks took to execute in microseconds.
 
-Example
-=======
+## Example
 
+```javascript
  var t = require("proctimer");
 
  var myFunction() {
@@ -22,3 +21,4 @@ Example
  console.log(t.timers.myfunction.median()); // median tick duration
  console.log(t.timers.myfunction.start()); // timestamp of the start of the first tick
  console.log(t.timers.myfunction.end()); // timestamp of the end of the last tick
+```
