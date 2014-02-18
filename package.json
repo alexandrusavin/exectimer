@@ -1,6 +1,6 @@
 {
     "name": "exectimer",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Very simple module to calculate block execution time.",
     "keywords": ["time", "profiler", "execution"],
     "homepage": "https://github.com/alexandrusavin/exectimer",
@@ -15,8 +15,7 @@
     },
     "main": "./index",
     "scripts": {
-        "test": "node test.js",
-        "install": "node-gyp rebuild"
+        "test": "node test.js"
     },
     "engines": {
         "node": ">= 0.8.0"
