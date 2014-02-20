@@ -8,17 +8,18 @@ Very simple nodejs module that can be used to track the time that diferent execu
  var t = require("proctimer");
 
  var myFunction() {
-   t.tick("myfuncton");
+   var tick = new t.tick("myFunction");
+   tick.start();
    // do some processing and end this tick
-   t.tick("myfunction");
+   tick.stop();
  }
 
  // Display the results
- console.log(t.timers.myfunction.duration()); // total duration of all ticks
- console.log(t.timers.myfunction.min()); // minimal tick duration
- console.log(t.timers.myfunction.max()); // maximal tick duration
- console.log(t.timers.myfunction.mean()); // mean tick duration
- console.log(t.timers.myfunction.median()); // median tick duration
- console.log(t.timers.myfunction.start()); // timestamp of the start of the first tick
- console.log(t.timers.myfunction.end()); // timestamp of the end of the last tick
+ console.log(t.timers.myFunction.duration()); // total duration of all ticks
+ console.log(t.timers.myFunction.min()); // minimal tick duration
+ console.log(t.timers.myFunction.max()); // maximal tick duration
+ console.log(t.timers.myFunction.mean()); // mean tick duration
+ console.log(t.timers.myFunction.median()); // median tick duration
+ console.log(t.timers.myFunction.start()); // timestamp of the start of the first tick
+ console.log(t.timers.myFunction.end()); // timestamp of the end of the last tick
 ```

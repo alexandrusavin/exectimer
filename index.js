@@ -2,10 +2,10 @@ var microtime = require("microtime");
 
 var timers = {};
 
-module.exports.tick = function(name) {
+var timer = function(name) {
     if (typeof timers[name] == "undefined") {
         timers[name] = {
-            ticks: [{start: microtime.now()}],
+            ticks: [],
             median: function() {
                 this.ticks.sort( function(a,b) {
                     return (a.end - a.start) - (b.end - b.start);
@@ -44,28 +44,27 @@ module.exports.tick = function(name) {
                 return Object.keys(this.ticks).length;
             }
         }
-
-    } else {
-        var timer = timers[name];
-        if (typeof timer.ticks[timer.ticks.length-1].end == "undefined") {
-            timer.ticks[timer.ticks.length-1].end = microtime.now();
-            var dif = timer.ticks[timer.ticks.length-1].end - timer.ticks[timer.ticks.length-1].start;
-
-            if (timer.valmax > dif || typeof timer.valmax == "undefined"){
-                timer.valmin = dif;
-            }
-            if (timer.valmax < dif || typeof timer.valmax == "undefined") {
-                timer.valmax = dif
-            }
-        } else {
-            var tick = {
-                start: microtime.now()
-            }
-            timer.ticks.push(tick);
-        }
     }
 
     return timers[name];
 }
 
-module.exports.timers = timers;
+function tick (name) {
+    this.name = name;
+
+    return this;
+}
+
+tick.prototype.start = function () {
+    this.start = microtime.now();
+}
+
+tick.prototype.stop = function () {
+    this.end = microtime.now();
+    timer(this.name).ticks.push(this);
+}
+
+module.exports = {
+    timers: timers,
+    tick: tick
+}
