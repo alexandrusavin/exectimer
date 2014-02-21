@@ -29,7 +29,7 @@ var timer = function(name) {
                 return sum;
             },
             min: function () {
-                var min = 0;
+                var min = this.ticks[0].end - this.ticks[0].start;
                 this.ticks.forEach(function (tick) {
                     var diff = tick.end - tick.start;
                     if (diff < min) {
