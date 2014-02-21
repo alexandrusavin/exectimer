@@ -29,10 +29,26 @@ var timer = function(name) {
                 return sum;
             },
             min: function () {
-                return this.valmin;
+                var min = 0;
+                this.ticks.forEach(function (tick) {
+                    var diff = tick.end - tick.start;
+                    if (diff < min) {
+                        min = diff;
+                    }
+                })
+
+                return min;
             },
             max: function () {
-                return this.valmax;
+                var max = 0;
+                this.ticks.forEach(function (tick) {
+                    var diff = tick.end - tick.start;
+                    if (diff > max) {
+                        max = diff;
+                    }
+                })
+
+                return max;
             },
             start: function() {
                 return this.ticks[0].start;
