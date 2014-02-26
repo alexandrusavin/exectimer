@@ -24,7 +24,6 @@ Very simple nodejs module that can be used to track the time that diferent execu
  console.log(t.timers.myFunction.end()); // timestamp of the end of the last tick
 ```
 
-
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alexandrusavin/exectimer/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
 
