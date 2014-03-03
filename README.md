@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
-
 # Description
 
 Very simple nodejs module that can be used to track the time that diferent execution blocks took to execute in microseconds.
+
+[![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
 
 ## Example
 
