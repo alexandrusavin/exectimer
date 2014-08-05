@@ -7,7 +7,7 @@ Very simple nodejs module that can be used to track the time that diferent execu
 ## Example
 
 ```javascript
- var t = require("proctimer");
+ var t = require("exectimer");
 
  var myFunction() {
    var tick = new t.tick("myFunction");
