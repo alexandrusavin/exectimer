@@ -1,5 +1,3 @@
-var microtime = require("microtime");
-
 var timers = {};
 
 var timer = function(name) {
@@ -67,16 +65,17 @@ var timer = function(name) {
 
 function tick (name) {
     this.name = name;
-
     return this;
 }
 
 tick.prototype.start = function () {
-    this.start = microtime.now();
+    var time = process.hrtime();
+    this.start = time[1];
 }
 
 tick.prototype.stop = function () {
-    this.end = microtime.now();
+    var time = process.hrtime();
+    this.end = time[1];
     timer(this.name).ticks.push(this);
 }
 
