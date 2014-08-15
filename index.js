@@ -12,7 +12,7 @@ var timer = function(name) {
                 });
                 var half = Math.floor(this.ticks.length/2);
 
-                if (this.ticks.lenght % 2) {
+                if (this.ticks.length % 2) {
                     return (this.ticks[half].end - this.ticks[half].start);
                 } else {
                     return (this.ticks[half-1].end - this.ticks[half-1].start)
