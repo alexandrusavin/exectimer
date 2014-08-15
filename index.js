@@ -22,7 +22,7 @@ var timer = function(name) {
             },
             duration: function() {
                 for (var i=0,sum=0;i<this.ticks.length;i++) {
-                    sum+=(this.ticks[i].end - this.ticks[i].start)
+                    sum+=(this.ticks[i].end - this.ticks[i].start);
                 }
                 return sum;
             },
@@ -33,7 +33,7 @@ var timer = function(name) {
                     if (diff < min) {
                         min = diff;
                     }
-                })
+                });
 
                 return min;
             },
@@ -44,7 +44,7 @@ var timer = function(name) {
                     if (diff > max) {
                         max = diff;
                     }
-                })
+                });
 
                 return max;
             },
@@ -61,25 +61,23 @@ var timer = function(name) {
     }
 
     return timers[name];
-}
+};
 
-function tick (name) {
+function Tick (name) {
     this.name = name;
     return this;
 }
 
-tick.prototype.start = function () {
-    var time = process.hrtime();
-    this.start = time[1];
-}
+Tick.prototype.start = function () {
+    this.start = process.hrtime()[1];
+};
 
-tick.prototype.stop = function () {
-    var time = process.hrtime();
-    this.end = time[1];
+Tick.prototype.stop = function () {
+    this.end = process.hrtime()[1];
     timer(this.name).ticks.push(this);
-}
+};
 
 module.exports = {
     timers: timers,
-    tick: tick
-}
+    Tick: Tick
+};

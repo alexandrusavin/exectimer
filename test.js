@@ -1,21 +1,30 @@
 var t = require("./index");
 
 function calculate(num){
-    var pi=4,top=4,bot=3,minus = true;
-    next(pi,top,bot,minus,num);
-}
-function next(pi,top,bot,minus,num){
 
-    for(var i=0;i<num;i++){
-        var tickPi = new t.tick("pi");
-        tickPi.start();
-        pi += (minus == true)?-(top/bot):(top/bot);
-        minus = !minus;
-        bot+=2;
-        tickPi.stop();
+    var m = 25,
+        // a - 1 should be divisible by m's prime factors
+        a = 11,
+        // c and m should be co-prime
+        c = 17;
+    // Setting the seed
+    var z = 3;
+    var rand = function() {
+        // define the recurrence relationship
+        z = (a * z + c) % m;
+        // return an integer
+        // Could return a float in (0, 1) by dividing by m
+        return z;
+    };
+
+    for(i = 0; i < num; i++) {
+        var tick = new t.Tick("calc");
+        tick.start();
+        rand();
+        tick.stop();
     }
 
-    timer = t.timers.pi;
+    var timer = t.timers.calc;
 
     console.log("Calculated pi with an accuracy of 9999999 in " + timer.duration()/1000 + "ms\n"
         + "Times per calculation:\n"
@@ -28,4 +37,4 @@ function next(pi,top,bot,minus,num){
         + " end: " + timer.end())
 }
 
-calculate(999999);
+calculate(99);
