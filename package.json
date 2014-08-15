@@ -1,6 +1,6 @@
 {
     "name": "exectimer",
-    "version": "0.1.6",
+    "version": "0.2.0",
     "description": "Very simple module to calculate block execution time.",
     "keywords": ["time", "profiler", "execution"],
     "homepage": "https://github.com/alexandrusavin/exectimer",
@@ -19,8 +19,5 @@
     },
     "engines": {
         "node": ">= 0.8.0"
-    },
-    "dependencies": {
-        "microtime": "0.5.1"
     }
 }
