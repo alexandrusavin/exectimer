@@ -4,7 +4,13 @@ Very simple nodejs module that can be used to track the time that diferent execu
 
 [![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
 
-## Example
+## Install
+
+```
+npm install exectimer
+```
+
+## Usage
 
 ```javascript
  var t = require("exectimer");
