@@ -1,11 +1,12 @@
 # Description
 
-Very simple nodejs module that can be used to track the time that diferent execution blocks took to execute in microseconds.
+Very simple but powerful nodejs module build to track execution time with a resolution of nanoseconds.
 
 [![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
 
 ## Install
 
+Simply run:
 ```
 npm install exectimer
 ```
@@ -22,12 +23,13 @@ npm install exectimer
    tick.stop();
  }
 
+ var myFunc_timer = t.timers.myFunction;
  // Display the results
- console.log(t.timers.myFunction.duration()); // total duration of all ticks
- console.log(t.timers.myFunction.min()); // minimal tick duration
- console.log(t.timers.myFunction.max()); // maximal tick duration
- console.log(t.timers.myFunction.mean()); // mean tick duration
- console.log(t.timers.myFunction.median()); // median tick duration
- console.log(t.timers.myFunction.start()); // timestamp of the start of the first tick
- console.log(t.timers.myFunction.end()); // timestamp of the end of the last tick
+ console.log(myFunc_timer.duration()); // total duration of all ticks
+ console.log(myFunc_timer.min()); // minimal tick duration
+ console.log(myFunc_timer.max()); // maximal tick duration
+ console.log(myFunc_timer.mean()); // mean tick duration
+ console.log(myFunc_timer.median()); // median tick duration
+ console.log(myFunc_timer.start()); // timestamp of the start of the first tick
+ console.log(myFunc_timer.end()); // timestamp of the end of the last tick
 ```
