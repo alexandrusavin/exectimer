@@ -30,6 +30,4 @@ npm install exectimer
  console.log(myFunc_timer.max()); // maximal tick duration
  console.log(myFunc_timer.mean()); // mean tick duration
  console.log(myFunc_timer.median()); // median tick duration
- console.log(myFunc_timer.start()); // timestamp of the start of the first tick
- console.log(myFunc_timer.end()); // timestamp of the end of the last tick
 ```

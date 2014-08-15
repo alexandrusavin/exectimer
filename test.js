@@ -28,13 +28,12 @@ function calculate(num){
 
     console.log("Calculated pi with an accuracy of 9999999 in " + timer.duration()/1000 + "ms\n"
         + "Times per calculation:\n"
-        + " average: " + timer.mean() + "ns\n"
-        + " median: " + timer.median() + "ns\n"
-        + " min: " + timer.min() + "ns\n"
-        + " max: " + timer.max() + "ns\n"
-        + " count: " + timer.count() + "\n"
-        + " start: " + timer.start() + "\n"
-        + " end: " + timer.end())
+        + " average: " + timer.parse(timer.mean()) + "\n"
+        + " median: " + timer.parse(timer.median()) + "\n"
+        + " min: " + timer.parse(timer.min()) + "\n"
+        + " max: " + timer.parse(timer.max()) + "\n"
+        + " duration: " + timer.parse(timer.duration()) + "\n"
+        + " count: " + timer.count());
 }
 
-calculate(99);
+calculate(999999);
