@@ -120,7 +120,6 @@ var timer = function(name) {
                 } else if (num >= 1e3 && num < 1e6) {
                     return num / 1e3 + "us";
                 } else if (num >= 1e6 && num < 1e9) {
-                    console.log(num + "\n");
                     return num / 1e6 + "ms";
                 } else if (num >= 1e9) {
                     return num / 1e9 + "s"
