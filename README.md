@@ -68,20 +68,22 @@ console.log("It took: " + myTimer.duration());
 # Example
 
 ```javascript
- var t = require("exectimer");
+var t = require("exectimer");
 
- var myFunction() {
-   var tick = new t.tick("myFunction");
+function myFunction() {
+   var tick = new t.Tick("myFunction");
    tick.start();
    // do some processing and end this tick
    tick.stop();
- }
+}
 
- var myFunc_timer = t.timers.myFunction;
- // Display the results
- console.log(myFunc_timer.duration()); // total duration of all ticks
- console.log(myFunc_timer.min()); // minimal tick duration
- console.log(myFunc_timer.max()); // maximal tick duration
- console.log(myFunc_timer.mean()); // mean tick duration
- console.log(myFunc_timer.median()); // median tick duration
+myFunction();
+
+var myFunc_timer = t.timers.myFunction;
+// Display the results
+console.log(myFunc_timer.duration()); // total duration of all ticks
+console.log(myFunc_timer.min());      // minimal tick duration
+console.log(myFunc_timer.max());      // maximal tick duration
+console.log(myFunc_timer.mean());     // mean tick duration
+console.log(myFunc_timer.median());   // median tick duration
 ```
