@@ -1,4 +1,4 @@
-var t = require("./index");
+var t = require("./../index");
 
 function calculate(num){
 
