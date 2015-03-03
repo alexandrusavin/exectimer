@@ -1,39 +1,49 @@
-var t = require("./../index");
+var should = require('should');
 
-function calculate(num){
+var t = require('./../index');
 
-    var m = 25,
-        // a - 1 should be divisible by m's prime factors
-        a = 11,
-        // c and m should be co-prime
-        c = 17;
-    // Setting the seed
-    var z = 3;
-    var rand = function() {
-        // define the recurrence relationship
-        z = (a * z + c) % m;
-        // return an integer
-        // Could return a float in (0, 1) by dividing by m
-        return z;
-    };
+describe('Timer', function() {
 
-    for(i = 0; i < num; i++) {
-        var tick = new t.Tick("calc");
-        tick.start();
-        rand();
-        tick.stop();
-    }
+  var timer = t.timer;
 
-    var timer = t.timers.calc;
+  it('should return a timer object', function() {
+    var newTimer = timer('mytimer');
 
-    console.log("Calculated pi with an accuracy of 9999999 in " + timer.duration()/1000 + "ms\n"
-        + "Times per calculation:\n"
-        + " average: " + timer.parse(timer.mean()) + "\n"
-        + " median: " + timer.parse(timer.median()) + "\n"
-        + " min: " + timer.parse(timer.min()) + "\n"
-        + " max: " + timer.parse(timer.max()) + "\n"
-        + " duration: " + timer.parse(timer.duration()) + "\n"
-        + " count: " + timer.count());
-}
+    newTimer.should.be.instanceOf(Object);
+  });
 
-calculate(999999);
+  it('should have all needed helper functions', function() {
+    var newTimer = timer('mytimer');
+    var helpers = ['median', 'mean', 'duration', 'min', 'max', 'count', 'parse'];
+
+    newTimer.should.be.an.Object.and.have.properties(helpers);
+
+    helpers.forEach(function(helper){
+      newTimer[helper].should.be.type('function');
+    });
+  });
+
+});
+
+describe('Tick', function() {
+
+  var Tick = t.Tick;
+
+  it('should have helper functions', function() {
+    var tick = new Tick('mytick');
+
+    tick.start.should.be.type('function');
+    tick.stop.should.be.type('function');
+    tick.getDiff.should.be.type('function');
+  });
+
+  it('should push a new item to the timers array', function() {
+    var tick = new Tick('mytick');
+
+    tick.start();
+    tick.stop();
+
+    t.timers.mytick.should.be.instanceOf(Object);
+  });
+
+});
