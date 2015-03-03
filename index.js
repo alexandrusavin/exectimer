@@ -10,7 +10,7 @@ var timers = {};
  * @returns {*}
  */
 var timer = function(name) {
-    if (typeof timers[name] == "undefined") {
+    if (typeof timers[name] === 'undefined') {
         timers[name] = {
             ticks: [],
 
@@ -116,16 +116,16 @@ var timer = function(name) {
              */
             parse: function (num) {
                 if (num < 1e3) {
-                    return num + "ns";
+                    return num + 'ns';
                 } else if (num >= 1e3 && num < 1e6) {
-                    return num / 1e3 + "us";
+                    return num / 1e3 + 'us';
                 } else if (num >= 1e6 && num < 1e9) {
-                    return num / 1e6 + "ms";
+                    return num / 1e6 + 'ms';
                 } else if (num >= 1e9) {
-                    return num / 1e9 + "s"
+                    return num / 1e9 + 's';
                 }
             }
-        }
+        };
     }
 
     return timers[name];
@@ -174,6 +174,7 @@ Tick.prototype.getDiff = function () {
 };
 
 module.exports = {
-    timers: timers,
-    Tick: Tick
+  timer: timer,
+  timers: timers,
+  Tick: Tick
 };
