@@ -81,27 +81,6 @@ var timer = function(name) {
             },
 
             /**
-             * DEPRICATED!!! Don't use this function as it doesn't work correctly and it is out of the scope
-             * of this project.
-             * TODO: Delete this function in the near future.
-             * @returns {number}
-             */
-            start: function() {
-                return this.ticks[0].getStart();
-            },
-
-            /**
-             * DEPRICATED!!! Don't use this function as it doesn't work correctly and it is out of the scope
-             * of this project.
-             * TODO: Delete this function in the near future.
-             * @returns {number}
-             */
-            end: function() {
-                var lastTick = this.ticks[this.ticks.length-1];
-                return lastTick.getStart() + lastTick.getDiff();
-            },
-
-            /**
              * Get the number of ticks.
              * @returns {Number}
              */
@@ -177,14 +156,6 @@ Tick.prototype.start = function () {
 Tick.prototype.stop = function () {
     this.hrend = process.hrtime(this.hrstart);
     timer(this.name).ticks.push(this);
-};
-
-/**
- * Get the start of the tick.
- * @returns Long nanoseconds
- */
-Tick.prototype.getStart = function () {
-    return this.hrstart[0] * 1e9 + this.hrstart[1];
 };
 
 /**
