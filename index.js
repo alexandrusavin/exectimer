@@ -10,7 +10,7 @@ var timers = {};
  * @returns {*}
  */
 var timer = function(name) {
-    if (typeof timers[name] == "undefined") {
+    if (typeof timers[name] === 'undefined') {
         timers[name] = {
             ticks: [],
 
@@ -81,27 +81,6 @@ var timer = function(name) {
             },
 
             /**
-             * DEPRICATED!!! Don't use this function as it doesn't work correctly and it is out of the scope
-             * of this project.
-             * TODO: Delete this function in the near future.
-             * @returns {number}
-             */
-            start: function() {
-                return this.ticks[0].getStart();
-            },
-
-            /**
-             * DEPRICATED!!! Don't use this function as it doesn't work correctly and it is out of the scope
-             * of this project.
-             * TODO: Delete this function in the near future.
-             * @returns {number}
-             */
-            end: function() {
-                var lastTick = this.ticks[this.ticks.length-1];
-                return lastTick.getStart() + lastTick.getDiff();
-            },
-
-            /**
              * Get the number of ticks.
              * @returns {Number}
              */
@@ -116,16 +95,16 @@ var timer = function(name) {
              */
             parse: function (num) {
                 if (num < 1e3) {
-                    return num + "ns";
+                    return num + 'ns';
                 } else if (num >= 1e3 && num < 1e6) {
-                    return num / 1e3 + "us";
+                    return num / 1e3 + 'us';
                 } else if (num >= 1e6 && num < 1e9) {
-                    return num / 1e6 + "ms";
+                    return num / 1e6 + 'ms';
                 } else if (num >= 1e9) {
-                    return num / 1e9 + "s"
+                    return num / 1e9 + 's';
                 }
             }
-        }
+        };
     }
 
     return timers[name];
@@ -141,6 +120,28 @@ function Tick (name) {
     this.name = name;
     return this;
 }
+
+Tick.wrap = function(name, callback) {
+  if (typeof name === 'function') {
+    callback = name;
+    name = functionName(callback);
+  }
+
+  if (name === '') {
+    name = 'anon';
+  }
+
+  var tick = new Tick(name);
+  tick.start();
+
+  var done = function() {
+    tick.stop();
+  };
+
+  callback(done);
+
+  return tick;
+};
 
 /**
  * Starts the tick.
@@ -158,14 +159,6 @@ Tick.prototype.stop = function () {
 };
 
 /**
- * Get the start of the tick.
- * @returns Long nanoseconds
- */
-Tick.prototype.getStart = function () {
-    return this.hrstart[0] * 1e9 + this.hrstart[1];
-};
-
-/**
  * Get the duration of the tick.
  * @returns Long nanoseconds
  */
@@ -174,6 +167,19 @@ Tick.prototype.getDiff = function () {
 };
 
 module.exports = {
-    timers: timers,
-    Tick: Tick
+  timer: timer,
+  timers: timers,
+  Tick: Tick
 };
+
+/**
+ * Helper function used to retrieve function name.
+ * @param fun
+ * @returns {string}
+ */
+function functionName(fun) {
+  var ret = fun.toString();
+  ret = ret.substr('function '.length);
+  ret = ret.substr(0, ret.indexOf('('));
+  return ret;
+}

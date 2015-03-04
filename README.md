@@ -17,10 +17,14 @@ Usage
 -----
 
 # Tick
- A tick is used to measure the difference between two execution points. They are than used to calculate the average, 
+ A tick is used to measure the difference between two execution points. All ticks are than used to calculate the average,
  median, min, max etc.
  Takes the name of the timer as an argument.
- 
+
+## Tick.wrap()
+ Static function that takes a name and a function as arguments. If the name is omitted than it tries to read the name of
+ the function or it just uses "anon".
+
 ## Tick.start()
  Starts the timer of this tick.
  
@@ -67,11 +71,36 @@ console.log("It took: " + myTimer.duration());
 
 # Example
 
+## Wrapping
 ```javascript
-var t = require("exectimer");
+var t = require('exectimer'),
+    Tick = t.Tick;
+
+for(var i = 0; i < 10; i++) {
+    Tick.wrap(function myFunction(done) {
+    // do some stuff here
+    done();
+    });
+}
+
+var results = t.timers.myFunction;
+
+// Display the results
+console.log(results.duration()); // total duration of all ticks
+console.log(results.min());      // minimal tick duration
+console.log(results.max());      // maximal tick duration
+console.log(results.mean());     // mean tick duration
+console.log(results.median());   // median tick duration
+```
+
+## Instantiating the ticks yourself
+
+```javascript
+var t = require("exectimer"),
+    Tick = t.Tick;
 
 function myFunction() {
-   var tick = new t.Tick("myFunction");
+   var tick = new Tick("myFunction");
    tick.start();
    // do some processing and end this tick
    tick.stop();

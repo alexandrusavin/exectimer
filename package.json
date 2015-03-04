@@ -1,23 +1,37 @@
 {
-    "name": "exectimer",
-    "version": "0.2.2",
-    "description": "Very simple module to calculate block execution time.",
-    "keywords": ["time", "profiler", "execution"],
-    "homepage": "https://github.com/alexandrusavin/exectimer",
-    "bugs": "https://github.com/alexandrusavin/exectimer/issues",
-    "author": {
-        "name": "Alexandru Savin",
-        "email": "alexandrusavin@gmail.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/alexandrusavin/exectimer.git"
-    },
-    "main": "./index",
-    "scripts": {
-        "test": "node test.js"
-    },
-    "engines": {
-        "node": ">= 0.8.0"
-    }
+  "name": "exectimer",
+  "version": "1.0.0",
+  "description": "Very simple module to calculate block execution time.",
+  "keywords": [
+    "time",
+    "profiler",
+    "execution"
+  ],
+  "homepage": "https://github.com/alexandrusavin/exectimer",
+  "bugs": "https://github.com/alexandrusavin/exectimer/issues",
+  "author": {
+    "name": "Alexandru Savin",
+    "email": "alexandrusavin@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexandrusavin/exectimer.git"
+  },
+  "main": "./index",
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bump": "^0.3.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-timer": "^0.6.0",
+    "load-grunt-tasks": "^3.1.0",
+    "mocha": "^2.1.0",
+    "should": "^5.0.1"
+  }
 }
