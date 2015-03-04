@@ -142,6 +142,28 @@ function Tick (name) {
     return this;
 }
 
+Tick.wrap = function(name, callback) {
+  if (typeof name === 'function') {
+    callback = name;
+    name = functionName(callback);
+  }
+
+  if (name === '') {
+    name = 'anon';
+  }
+
+  var tick = new Tick(name);
+  tick.start();
+
+  var done = function() {
+    tick.stop();
+  };
+
+  callback(done);
+
+  return tick;
+};
+
 /**
  * Starts the tick.
  */
@@ -178,3 +200,15 @@ module.exports = {
   timers: timers,
   Tick: Tick
 };
+
+/**
+ * Helper function used to retrieve function name.
+ * @param fun
+ * @returns {string}
+ */
+function functionName(fun) {
+  var ret = fun.toString();
+  ret = ret.substr('function '.length);
+  ret = ret.substr(0, ret.indexOf('('));
+  return ret;
+}
