@@ -19,7 +19,7 @@
   },
   "main": "./index",
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/mocha"
   },
   "engines": {
     "node": ">= 0.8.0"
