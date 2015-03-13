@@ -22,12 +22,13 @@ var timer = function(name) {
                 this.ticks.sort( function(a,b) {
                     return (a.getDiff() - b.getDiff());
                 });
-                var half = Math.floor(this.ticks.length/2);
 
-                if (this.ticks.length % 2) {
-                    return (this.ticks[half].getDiff());
+                var l = this.ticks.length;
+
+                if (l % 2) {
+                  return (this.ticks[l/2].getDiff() + this.ticks[l/2 + 1].getDiff()) / 2;
                 } else {
-                    return (this.ticks[half-1].getDiff()) + (this.ticks[half].getDiff()) / 2;
+                  return this.ticks[l/2].getDiff();
                 }
             },
 
