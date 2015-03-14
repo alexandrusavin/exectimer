@@ -98,12 +98,14 @@ console.log(results.median());   // median tick duration
 var t = require("exectimer"),
   Tick = t.Tick;
 
-var tick = new Tick("myFunction");
-tick.start();
-
-setTimeout(function() {
-  tick.stop();
-}, 100);
+for(var i = 0; i < 10; i++) {
+  var tick = new Tick("myFunction");
+  tick.start();
+  
+  setTimeout(function() {
+    tick.stop();
+  }, 100);
+}
 
 var myFunc_timer = t.timers.myFunction;
 // Display the results
