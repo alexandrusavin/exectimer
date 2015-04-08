@@ -4,8 +4,12 @@
   "description": "Very simple module to calculate block execution time.",
   "keywords": [
     "time",
+    "timer"
     "profiler",
-    "execution"
+    "execution",
+    "performance",
+    "analysis",
+    "benchmark"
   ],
   "homepage": "https://github.com/alexandrusavin/exectimer",
   "bugs": "https://github.com/alexandrusavin/exectimer/issues",
