@@ -4,7 +4,7 @@
   "description": "Very simple module to calculate block execution time.",
   "keywords": [
     "time",
-    "timer"
+    "timer",
     "profiler",
     "execution",
     "performance",
