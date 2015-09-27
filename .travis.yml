@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- '0.8'
 - '0.10'
+- '0.12'
 deploy:
   api_key:
     secure: L1ngJEuIIq4hQ64S1myqAKtPmZmskmKuFN2f2BTUqUM9P32GdOAoa3oOU/Bdftjb8OrsUsBxCeFgle9DzE4JDLA1UvzYOKMMq+HKeHDurYX9Xpj7Zbayo8cONts+Y4+L2fwk1H85j+Hz6xrnZ0kLGZVJ0OnolmdWTyyGATzpk2E=
