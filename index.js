@@ -9,7 +9,7 @@ var timers = {};
  * @param name
  * @returns {*}
  */
-var timer = function(name) {
+var timer = function (name) {
     if (typeof timers[name] === 'undefined') {
         timers[name] = {
             ticks: [],
@@ -18,17 +18,23 @@ var timer = function(name) {
              * Get the median of all ticks.
              * @returns {*}
              */
-            median: function() {
-                this.ticks.sort( function(a,b) {
-                    return (a.getDiff() - b.getDiff());
-                });
+            median: function () {
+                if (this.ticks.length > 1) {
+                    this.ticks.sort(function (a, b) {
+                        return a && b && (a.getDiff() - b.getDiff()) || 0;
+                    });
 
-                var l = this.ticks.length;
+                    var l = this.ticks.length;
+                    var half = Math.floor(l / 2);
 
-                if (l % 2) {
-                  return (this.ticks[l/2].getDiff() + this.ticks[l/2 + 1].getDiff()) / 2;
+
+                    if (l % 2) {
+                        return this.ticks[half].getDiff();
+                    } else {
+                        return (this.ticks[half - 1].getDiff() + this.ticks[half].getDiff()) / 2;
+                    }
                 } else {
-                  return this.ticks[l/2].getDiff();
+                    return this.ticks[0].getDiff();
                 }
             },
 
@@ -36,15 +42,15 @@ var timer = function(name) {
              * Get the average duration of all ticks.
              * @returns {number}
              */
-            mean: function() {
-                return this.duration()/this.ticks.length;
+            mean: function () {
+                return this.duration() / this.ticks.length;
             },
 
             /**
              * Get the duration of all ticks.
              * @returns {number}
              */
-            duration: function() {
+            duration: function () {
                 for (var i = 0, sum = 0; i < this.ticks.length; i++) {
                     sum += this.ticks[i].getDiff();
                 }
@@ -85,7 +91,7 @@ var timer = function(name) {
              * Get the number of ticks.
              * @returns {Number}
              */
-            count: function() {
+            count: function () {
                 return Object.keys(this.ticks).length;
             },
 
@@ -117,31 +123,31 @@ var timer = function(name) {
  * @returns {Tick}
  * @constructor
  */
-function Tick (name) {
+function Tick(name) {
     this.name = name;
     return this;
 }
 
-Tick.wrap = function(name, callback) {
-  if (typeof name === 'function') {
-    callback = name;
-    name = functionName(callback);
-  }
+Tick.wrap = function (name, callback) {
+    if (typeof name === 'function') {
+        callback = name;
+        name = functionName(callback);
+    }
 
-  if (name === '') {
-    name = 'anon';
-  }
+    if (name === '') {
+        name = 'anon';
+    }
 
-  var tick = new Tick(name);
-  tick.start();
+    var tick = new Tick(name);
+    tick.start();
 
-  var done = function() {
-    tick.stop();
-  };
+    var done = function () {
+        tick.stop();
+    };
 
-  callback(done);
+    callback(done);
 
-  return tick;
+    return tick;
 };
 
 /**
@@ -168,9 +174,9 @@ Tick.prototype.getDiff = function () {
 };
 
 module.exports = {
-  timer: timer,
-  timers: timers,
-  Tick: Tick
+    timer: timer,
+    timers: timers,
+    Tick: Tick
 };
 
 /**
@@ -179,8 +185,8 @@ module.exports = {
  * @returns {string}
  */
 function functionName(fun) {
-  var ret = fun.toString();
-  ret = ret.substr('function '.length);
-  ret = ret.substr(0, ret.indexOf('('));
-  return ret;
+    var ret = fun.toString();
+    ret = ret.substr('function '.length);
+    ret = ret.substr(0, ret.indexOf('('));
+    return ret;
 }
