@@ -1,15 +1,17 @@
+'use strict';
+
 /**
  * Contains all timers.
  * @type {{}}
  */
-var timers = {};
+const timers = {};
 
 /**
  * Timers factory object.
  * @param name
  * @returns {*}
  */
-var timer = function (name) {
+const timer = function (name) {
     if (typeof timers[name] === 'undefined') {
         timers[name] = {
             ticks: [],
@@ -24,8 +26,8 @@ var timer = function (name) {
                         return a && b && (a.getDiff() - b.getDiff()) || 0;
                     });
 
-                    var l = this.ticks.length;
-                    var half = Math.floor(l / 2);
+                    const l = this.ticks.length;
+                    const half = Math.floor(l / 2);
 
 
                     if (l % 2) {
@@ -51,7 +53,8 @@ var timer = function (name) {
              * @returns {number}
              */
             duration: function () {
-                for (var i = 0, sum = 0; i < this.ticks.length; i++) {
+                let sum = 0;
+                for (let i = 0, l = this.ticks.length; i < l; i++) {
                     sum += this.ticks[i].getDiff();
                 }
                 return sum;
@@ -62,7 +65,7 @@ var timer = function (name) {
              * @returns {number}
              */
             min: function () {
-                var min = this.ticks[0].getDiff();
+                let min = this.ticks[0].getDiff();
                 this.ticks.forEach(function (tick) {
                     if (tick.getDiff() < min) {
                         min = tick.getDiff();
@@ -77,7 +80,7 @@ var timer = function (name) {
              * @returns {number}
              */
             max: function () {
-                var max = 0;
+                let max = 0;
                 this.ticks.forEach(function (tick) {
                     if (tick.getDiff() > max) {
                         max = tick.getDiff();
@@ -138,10 +141,10 @@ Tick.wrap = function (name, callback) {
         name = 'anon';
     }
 
-    var tick = new Tick(name);
+    const tick = new Tick(name);
     tick.start();
 
-    var done = function () {
+    const done = function () {
         tick.stop();
     };
 
@@ -185,7 +188,7 @@ module.exports = {
  * @returns {string}
  */
 function functionName(fun) {
-    var ret = fun.toString();
+    let ret = fun.toString();
     ret = ret.substr('function '.length);
     ret = ret.substr(0, ret.indexOf('('));
     return ret;

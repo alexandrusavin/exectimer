@@ -1,18 +1,18 @@
 'use strict';
 
-var should = require('should');
-var async = require('async');
+const should = require('should');
+const async = require('async');
 
-var t = require('./../index');
-var Tick = t.Tick;
+const t = require('./../index');
+const Tick = t.Tick;
 
 describe('Integration - 10 loops of 100ms timeouts', function () {
 
     before(function (done) {
-        var items = [];
+        const items = [];
 
         function tesLoop(cb) {
-            var tick = new Tick('testLoop');
+            const tick = new Tick('testLoop');
             tick.start();
             setTimeout(function () {
                 tick.stop();
@@ -20,7 +20,7 @@ describe('Integration - 10 loops of 100ms timeouts', function () {
             }, 100);
         }
 
-        for (var i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
             items.push(tesLoop);
         }
 

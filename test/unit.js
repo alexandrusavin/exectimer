@@ -1,25 +1,27 @@
-var should = require('should');
-var async = require('async');
+'use strict';
 
-var t = require('./../index');
-var Tick = t.Tick;
+const should = require('should');
+const async = require('async');
+
+const t = require('./../index');
+const Tick = t.Tick;
 
 describe('Unit', function () {
     describe('Timer', function () {
 
-        var timer = t.timer;
+        const timer = t.timer;
 
         it('should return a timer object', function () {
-            var newTimer = timer('mytimer');
+            const newTimer = timer('mytimer');
 
             newTimer.should.be.instanceOf(Object);
         });
 
         it('should have all needed helper functions', function () {
-            var newTimer = timer('mytimer');
-            var helpers = ['median', 'mean', 'duration', 'min', 'max', 'count', 'parse'];
+            const newTimer = timer('mytimer');
+            const helpers = ['median', 'mean', 'duration', 'min', 'max', 'count', 'parse'];
 
-            newTimer.should.be.an.Object.and.have.properties(helpers);
+            newTimer.should.be.an.instanceOf(Object).and.have.properties(helpers);
 
             helpers.forEach(function (helper) {
                 newTimer[helper].should.be.type('function');
@@ -31,7 +33,7 @@ describe('Unit', function () {
     describe('Tick', function () {
 
         it('should have helper functions', function () {
-            var tick = new Tick('mytick');
+            const tick = new Tick('mytick');
 
             tick.start.should.be.type('function');
             tick.stop.should.be.type('function');
@@ -39,7 +41,7 @@ describe('Unit', function () {
         });
 
         it('should push a new item to the timers array', function () {
-            var tick = new Tick('mytick');
+            const tick = new Tick('mytick');
 
             tick.start();
             tick.stop();
@@ -48,7 +50,7 @@ describe('Unit', function () {
         });
 
         it('should wrap a function and return a tick object', function () {
-            var tick = Tick.wrap(function myFunction(done) {
+            const tick = Tick.wrap(function myFunction(done) {
                 done();
             });
 
@@ -56,7 +58,7 @@ describe('Unit', function () {
         });
 
         it('should wrap a function and use it\'s name to add it to the timer array', function () {
-            var tick = Tick.wrap(function myFunction(done) {
+            Tick.wrap(function myFunction(done) {
                 done();
             });
 
@@ -69,7 +71,7 @@ describe('Unit', function () {
                 done();
             }
 
-            for (var i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i++) {
                 Tick.wrap(myNewFunction);
             }
 
@@ -77,7 +79,7 @@ describe('Unit', function () {
         });
 
         it('should wrap anonymous functions too', function () {
-            var tick = Tick.wrap(function (done) {
+            Tick.wrap(function (done) {
                 done();
             });
 
