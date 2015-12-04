@@ -49,60 +49,55 @@ describe('Unit', function () {
             t.timers.mytick.should.be.instanceOf(Object);
         });
 
-        it('should wrap a function and return a tick object', function () {
-            const tick = Tick.wrap(function myFunction(done) {
-                done();
+        context('wrapper', function() {
+            it('should return a tick object', function () {
+                const tick = Tick.wrap(function myFunction(done) {
+                    done();
+                });
+
+                tick.should.be.instanceOf(Tick);
             });
 
-            tick.should.be.instanceOf(Tick);
-        });
+            it('should use it\'s name to add it to the timer array', function () {
+                Tick.wrap(function myFunction(done) {
+                    done();
+                });
 
-        it('should wrap a function and use it\'s name to add it to the timer array', function () {
-            Tick.wrap(function myFunction(done) {
-                done();
+                t.timers.myFunction.should.be.instanceOf(Object);
             });
 
-            t.timers.myFunction.should.be.instanceOf(Object);
-        });
+            it('should measure all calls', function () {
 
-        it('should wrap a function and measure all the calls of it.', function () {
+                function myNewFunction(done) {
+                    done();
+                }
 
-            function myNewFunction(done) {
-                done();
-            }
+                for (let i = 0; i < 10; i++) {
+                    Tick.wrap(myNewFunction);
+                }
 
-            for (let i = 0; i < 10; i++) {
-                Tick.wrap(myNewFunction);
-            }
-
-            t.timers.myNewFunction.ticks.should.have.lengthOf(10);
-        });
-
-        it('should wrap anonymous functions too', function () {
-            Tick.wrap(function (done) {
-                done();
+                t.timers.myNewFunction.ticks.should.have.lengthOf(10);
             });
 
-            t.timers.anon.should.be.instanceOf(Object);
-            t.timers.anon.ticks.should.have.a.lengthOf(1);
-        });
+            it('should name anonymous functions `anon`', function () {
+                Tick.wrap(function (done) {
+                    done();
+                });
 
-        it('should wrap functions and use a different name than function\'s name', function () {
-            Tick.wrap('myOtherFunc', function (done) {
-                done();
+                t.timers.anon.should.be.instanceOf(Object);
+                t.timers.anon.ticks.should.have.a.lengthOf(1);
             });
 
-            t.timers.myOtherFunc.should.be.instanceOf(Object);
-            t.timers.myOtherFunc.ticks.should.have.a.lengthOf(1);
+            it('should overwrite function\'s name if set as argument', function () {
+                Tick.wrap('anotherFunc', function someFuncNameThatShouldBePicked(done) {
+                    done();
+                });
 
-            Tick.wrap('anotherFunc', function someFuncNameThatShouldBePicked(done) {
-                done();
+                t.timers.anotherFunc.should.be.instanceOf(Object);
+                t.timers.anotherFunc.ticks.should.have.a.lengthOf(1);
+
+                should.not.exists(t.timers.someFuncNameThatShouldBePicked);
             });
-
-            t.timers.anotherFunc.should.be.instanceOf(Object);
-            t.timers.anotherFunc.ticks.should.have.a.lengthOf(1);
-
-            should.not.exists(t.timers.someFuncNameThatShouldBePicked);
         });
 
     });

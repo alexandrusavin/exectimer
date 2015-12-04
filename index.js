@@ -1,5 +1,7 @@
 'use strict';
 
+const co = require('co');
+
 /**
  * Contains all timers.
  * @type {{}}
@@ -121,6 +123,28 @@ const timer = function (name) {
 };
 
 /**
+ * Check if `obj` is a generator function.
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+function isGeneratorFunction(obj) {
+    var constructor = obj.constructor;
+
+    if (!constructor) {
+        return false;
+    }
+
+    if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) {
+        return true;
+    }
+
+    return 'function' === typeof constructor.prototype.next && 'function' === typeof constructor.prototype.throw;
+}
+
+
+/**
  * Constructor of tick.
  * @param name The name of this tick.
  * @returns {Tick}
@@ -148,7 +172,16 @@ Tick.wrap = function (name, callback) {
         tick.stop();
     };
 
-    callback(done);
+    if (isGeneratorFunction(callback)) {
+        co(callback).then(done, done);
+    } else if(!!callback.toString().match(/^function.*\(.*\)/)) {
+        // If done is passed when the callback is declared than we assume is async
+        callback(done);
+    } else {
+        // Otherwise just call the function and stop the tick
+        callback();
+        tick.stop();
+    }
 
     return tick;
 };
