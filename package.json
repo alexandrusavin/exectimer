@@ -27,7 +27,7 @@
     "jshint": "jshint --config .jshintrc --exclude node_modules *.js"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">=4.1.0"
   },
   "devDependencies": {
     "async": "^1.5.0",
