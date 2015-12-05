@@ -1,15 +1,19 @@
+'use strict';
+
+const co = require('co');
+
 /**
  * Contains all timers.
  * @type {{}}
  */
-var timers = {};
+const timers = {};
 
 /**
  * Timers factory object.
  * @param name
  * @returns {*}
  */
-var timer = function (name) {
+const timer = function (name) {
     if (typeof timers[name] === 'undefined') {
         timers[name] = {
             ticks: [],
@@ -24,8 +28,8 @@ var timer = function (name) {
                         return a && b && (a.getDiff() - b.getDiff()) || 0;
                     });
 
-                    var l = this.ticks.length;
-                    var half = Math.floor(l / 2);
+                    const l = this.ticks.length;
+                    const half = Math.floor(l / 2);
 
 
                     if (l % 2) {
@@ -51,7 +55,8 @@ var timer = function (name) {
              * @returns {number}
              */
             duration: function () {
-                for (var i = 0, sum = 0; i < this.ticks.length; i++) {
+                let sum = 0;
+                for (let i = 0, l = this.ticks.length; i < l; i++) {
                     sum += this.ticks[i].getDiff();
                 }
                 return sum;
@@ -62,7 +67,7 @@ var timer = function (name) {
              * @returns {number}
              */
             min: function () {
-                var min = this.ticks[0].getDiff();
+                let min = this.ticks[0].getDiff();
                 this.ticks.forEach(function (tick) {
                     if (tick.getDiff() < min) {
                         min = tick.getDiff();
@@ -77,7 +82,7 @@ var timer = function (name) {
              * @returns {number}
              */
             max: function () {
-                var max = 0;
+                let max = 0;
                 this.ticks.forEach(function (tick) {
                     if (tick.getDiff() > max) {
                         max = tick.getDiff();
@@ -118,6 +123,28 @@ var timer = function (name) {
 };
 
 /**
+ * Check if `obj` is a generator function.
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+function isGeneratorFunction(obj) {
+    var constructor = obj.constructor;
+
+    if (!constructor) {
+        return false;
+    }
+
+    if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) {
+        return true;
+    }
+
+    return 'function' === typeof constructor.prototype.next && 'function' === typeof constructor.prototype.throw;
+}
+
+
+/**
  * Constructor of tick.
  * @param name The name of this tick.
  * @returns {Tick}
@@ -138,14 +165,23 @@ Tick.wrap = function (name, callback) {
         name = 'anon';
     }
 
-    var tick = new Tick(name);
+    const tick = new Tick(name);
     tick.start();
 
-    var done = function () {
+    const done = function () {
         tick.stop();
     };
 
-    callback(done);
+    if (isGeneratorFunction(callback)) {
+        co(callback).then(done, done);
+    } else if(!!callback.toString().match(/^function.*\(.*\)/)) {
+        // If done is passed when the callback is declared than we assume is async
+        callback(done);
+    } else {
+        // Otherwise just call the function and stop the tick
+        callback();
+        tick.stop();
+    }
 
     return tick;
 };
@@ -185,7 +221,7 @@ module.exports = {
  * @returns {string}
  */
 function functionName(fun) {
-    var ret = fun.toString();
+    let ret = fun.toString();
     ret = ret.substr('function '.length);
     ret = ret.substr(0, ret.indexOf('('));
     return ret;
