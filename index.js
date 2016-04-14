@@ -24,18 +24,18 @@ const timer = function (name) {
              */
             median: function () {
                 if (this.ticks.length > 1) {
-                    this.ticks.sort(function (a, b) {
+                    const sorted = this.ticks.slice(0).sort(function (a, b) {
                         return a && b && (a.getDiff() - b.getDiff()) || 0;
                     });
 
-                    const l = this.ticks.length;
+                    const l = sorted.length;
                     const half = Math.floor(l / 2);
 
 
                     if (l % 2) {
-                        return this.ticks[half].getDiff();
+                        return sorted[half].getDiff();
                     } else {
-                        return (this.ticks[half - 1].getDiff() + this.ticks[half].getDiff()) / 2;
+                        return (sorted[half - 1].getDiff() + sorted[half].getDiff()) / 2;
                     }
                 } else {
                     return this.ticks[0].getDiff();
