@@ -69,12 +69,15 @@ var t = require("exectimer"),
   Tick = t.Tick;
 
 for(var i = 0; i < 10; i++) {
-  var tick = new Tick("myFunction");
-  tick.start();
-  
-  setTimeout(function() {
-    tick.stop();
-  }, 100);
+    // unique contexts to avoid aliasing (#9)
+    (function () {
+        var tick = new Tick("myFunction");
+        tick.start();
+
+        setTimeout(function() {
+            tick.stop();
+        }, Math.random() * 100);
+    })();
 }
 
 var myFunc_timer = t.timers.myFunction;
