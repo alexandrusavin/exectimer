@@ -7,7 +7,7 @@ const t = require('./../index');
 const Tick = t.Tick;
 
 const suts = {
-    testCustomInit: function(cb) {
+    testCustomInit: function(n, cb) {
         const tick = new Tick('testCustomInit');
         tick.start();
         setTimeout(function () {
@@ -15,9 +15,9 @@ const suts = {
             cb();
         }, 100);
     },
-    testWrap: function(cb) {
+    testWrap: function(n, cb) {
         Tick.wrap('testWrap', function* () {
-            yield new Promise(function(resolve, reject) {
+            yield new Promise(function(resolve) {
                 setTimeout(function () {
                     resolve();
                     cb();
@@ -32,13 +32,7 @@ describe('Integration - each 10 loops of 100ms timeouts', function () {
     Object.keys(suts).forEach(function(funcName) {
         describe(funcName, function() {
             before(function(done) {
-                const items = [];
-
-                for (let i = 0; i < 10; i++) {
-                    items.push(suts[funcName]);
-                }
-
-                async.parallel(items, function () {
+                async.times(10, suts[funcName], function () {
                     done();
                 });
             });
