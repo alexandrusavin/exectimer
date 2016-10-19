@@ -123,28 +123,6 @@ const timer = function (name) {
 };
 
 /**
- * Check if `obj` is a generator function.
- *
- * @param {Mixed} obj
- * @return {Boolean}
- * @api private
- */
-function isGeneratorFunction(obj) {
-    var constructor = obj.constructor;
-
-    if (!constructor) {
-        return false;
-    }
-
-    if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) {
-        return true;
-    }
-
-    return 'function' === typeof constructor.prototype.next && 'function' === typeof constructor.prototype.throw;
-}
-
-
-/**
  * Constructor of tick.
  * @param name The name of this tick.
  * @returns {Tick}
@@ -174,7 +152,7 @@ Tick.wrap = function (name, callback) {
 
     if (isGeneratorFunction(callback)) {
         co(callback).then(done, done);
-    } else if(!!callback.toString().match(/^function.*\(.*\)/)) {
+    } else if(isFunction(callback)) {
         // If done is passed when the callback is declared than we assume is async
         callback(done);
     } else {
@@ -225,4 +203,41 @@ function functionName(fun) {
     ret = ret.substr('function '.length);
     ret = ret.substr(0, ret.indexOf('('));
     return ret;
+}
+
+/**
+ * Check if `obj` is a generator function.
+ *
+ * @param {Mixed} value
+ * @return {Boolean}
+ * @api private
+ */
+function isGeneratorFunction(value) {
+    var tag = isObject(value) ? Object.prototype.toString.call(value) : '';
+
+    return tag == '[object GeneratorFunction]';
+}
+
+/**
+ * Helper function used to check is argument is of type function
+ * @author https://github.com/lodash/lodash/blob/4.16.4/lodash.js#L11590
+ * @param value
+ * @returns {boolean}
+ */
+function isFunction(value) {
+    // The use of `Object#toString` avoids issues with the `typeof` operator
+    // in Safari 9 which returns 'object' for typed array and other constructors.
+    var tag = isObject(value) ? Object.prototype.toString.call(value) : '';
+    return tag == '[object Function]' || tag == '[object GeneratorFunction]' || tag == '[object Proxy]';
+}
+
+/**
+ * Helper function used to check is argument is of type object
+ * @author https://github.com/lodash/lodash/blob/4.16.4/lodash.js#L11590
+ * @param value
+ * @returns {boolean}
+ */
+function isObject(value) {
+    var type = typeof value;
+    return value != null && (type == 'object' || type == 'function');
 }
