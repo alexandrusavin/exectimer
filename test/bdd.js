@@ -170,7 +170,7 @@ describe('BDD', function () {
             Tick.wrap('myOtherFunc', function* () {
                 prom = yield Promise.resolve('foo');
 
-                prom.should.equal('foo');
+                expect(prom).to.equal('foo');
                 done();
             });
         });
@@ -180,7 +180,7 @@ describe('BDD', function () {
                 try {
                     yield Promise.reject(new Error('foo'));
                 } catch(e) {
-                    e.message.should.equal('foo');
+                    expect(e.message).to.equal('foo');
                     done();
                 }
             });
