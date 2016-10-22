@@ -52,13 +52,6 @@ describe('Unit', function () {
         });
 
         context('wrapper', function() {
-            it('should return a tick object', function () {
-                const tick = Tick.wrap(function myFunction(done) {
-                    done();
-                });
-
-                expect(tick).to.be.an.instanceOf(Tick);
-            });
 
             it('should use function\'s name to add it to the timer array', function () {
                 Tick.wrap(function myFunction(done) {

@@ -151,17 +151,15 @@ Tick.wrap = function (name, callback) {
     };
 
     if (isGeneratorFunction(callback)) {
-        co(callback).then(done, done);
+        return co(callback).then(done, done);
     } else if(isFunction(callback)) {
         // If done is passed when the callback is declared than we assume is async
-        callback(done);
+        return callback(done);
     } else {
         // Otherwise just call the function and stop the tick
         tick.stop();
-        callback();
+        return callback();
     }
-
-    return tick;
 };
 
 /**
