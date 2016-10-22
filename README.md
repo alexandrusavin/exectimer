@@ -20,53 +20,71 @@ Usage
 
 #### Wrapping generator
 ```javascript
-var t = require('exectimer'),
-    Tick = t.Tick;
-    
+const t = require('exectimer');
+const Tick = t.Tick;
+
+const promises = [];
 for(var i = 0; i < 10; i++) {
-    Tick.wrap(function* myFunction() {
-      yield Promise.resolve(true);
+    const functionExecution = Tick.wrap(function* myFunction() {
+        yield Promise.resolve(true);
     });
+
+    promises.push(functionExecution);
 }
 
-var results = t.timers.myFunction;
-
-// Display the results
-console.log(results.duration()); // total duration of all ticks
-console.log(results.min());      // minimal tick duration
-console.log(results.max());      // maximal tick duration
-console.log(results.mean());     // mean tick duration
-console.log(results.median());   // median tick duration
+// After all ticks are finished
+Promise.all(promises).then(() => {
+    // display the results
+    var results = t.timers.myFunction;
+    console.log(results.parse(results.duration())); // total duration of all ticks
+    console.log(results.parse(results.min()));      // minimal tick duration
+    console.log(results.parse(results.max()));      // maximal tick duration
+    console.log(results.parse(results.mean()));     // mean tick duration
+    console.log(results.parse(results.median()));   // median tick duration
+});
 ```
 
 #### Wrapping
 ```javascript
-var t = require('exectimer'),
-    Tick = t.Tick;
+const t = require('exectimer');
+const Tick = t.Tick;
+
 
 for(var i = 0; i < 10; i++) {
     Tick.wrap(function myFunction(done) {
-      setTimeout(function() {
-        done();
-      }, 100);
+        setTimeout(function() {
+            done();
+        }, 10);
     });
 }
 
-var results = t.timers.myFunction;
-
 // Display the results
-console.log(results.duration()); // total duration of all ticks
-console.log(results.min());      // minimal tick duration
-console.log(results.max());      // maximal tick duration
-console.log(results.mean());     // mean tick duration
-console.log(results.median());   // median tick duration
+var results = t.timers.myFunction;
+setTimeout(() => {
+    console.log(results.parse(
+        results.duration()
+    )); // total duration of all ticks
+    console.log(results.parse(
+        results.min()
+    ));      // minimal tick duration
+    console.log(results.parse(
+        results.max()
+    ));      // maximal tick duration
+    console.log(results.parse(
+        results.mean()
+    ));     // mean tick duration
+    console.log(results.parse(
+        results.median()
+    ));   // median tick duration
+}, 101);
+
 ```
 
 #### Instantiating the ticks yourself
 
 ```javascript
-var t = require("exectimer"),
-  Tick = t.Tick;
+const t = require('exectimer');
+const Tick = t.Tick;
 
 for(var i = 0; i < 10; i++) {
     // unique contexts to avoid aliasing (#9)
@@ -76,17 +94,30 @@ for(var i = 0; i < 10; i++) {
 
         setTimeout(function() {
             tick.stop();
-        }, Math.random() * 100);
+        }, Math.random() * 10);
     })();
 }
 
-var myFunc_timer = t.timers.myFunction;
 // Display the results
-console.log(myFunc_timer.duration()); // total duration of all ticks
-console.log(myFunc_timer.min());      // minimal tick duration
-console.log(myFunc_timer.max());      // maximal tick duration
-console.log(myFunc_timer.mean());     // mean tick duration
-console.log(myFunc_timer.median());   // median tick duration
+var results = t.timers.myFunction;
+setTimeout(() => {
+    console.log(results.parse(
+        results.duration()
+    )); // total duration of all ticks
+    console.log(results.parse(
+        results.min()
+    ));      // minimal tick duration
+    console.log(results.parse(
+        results.max()
+    ));      // maximal tick duration
+    console.log(results.parse(
+        results.mean()
+    ));     // mean tick duration
+    console.log(results.parse(
+        results.median()
+    ));   // median tick duration
+}, 101);
+
 ```
 
 API
