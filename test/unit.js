@@ -60,12 +60,19 @@ describe('Unit', function () {
                 expect(tick).to.be.an.instanceOf(Tick);
             });
 
-            it('should use it\'s name to add it to the timer array', function () {
+            it('should use function\'s name to add it to the timer array', function () {
                 Tick.wrap(function myFunction(done) {
                     done();
                 });
 
                 expect(t.timers.myFunction).to.be.an.instanceOf(Object);
+            });
+
+            it('should use generator\'s name to add it to the timer array', function (cb) {
+                Tick.wrap(function* myGenerator() {
+                    expect(t.timers.myGenerator).to.be.an.instanceOf(Object);
+                    cb();
+                });
             });
 
             it('should measure all calls', function () {

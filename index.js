@@ -169,6 +169,7 @@ Tick.wrap = function (name, callback) {
  */
 Tick.prototype.start = function () {
     this.hrstart = process.hrtime();
+    timer(this.name).ticks.push(this);
 };
 
 /**
@@ -176,7 +177,6 @@ Tick.prototype.start = function () {
  */
 Tick.prototype.stop = function () {
     this.hrend = process.hrtime(this.hrstart);
-    timer(this.name).ticks.push(this);
 };
 
 /**
@@ -202,7 +202,7 @@ function functionName(fun) {
     let ret = fun.toString();
     ret = ret.substr('function '.length);
     ret = ret.substr(0, ret.indexOf('('));
-    return ret;
+    return ret.trim();
 }
 
 /**
