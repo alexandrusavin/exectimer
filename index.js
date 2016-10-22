@@ -157,8 +157,8 @@ Tick.wrap = function (name, callback) {
         callback(done);
     } else {
         // Otherwise just call the function and stop the tick
-        callback();
         tick.stop();
+        callback();
     }
 
     return tick;
@@ -213,9 +213,7 @@ function functionName(fun) {
  * @api private
  */
 function isGeneratorFunction(value) {
-    var tag = isObject(value) ? Object.prototype.toString.call(value) : '';
-
-    return tag == '[object GeneratorFunction]';
+    return typeof value === 'function' && value.constructor.name === 'GeneratorFunction';
 }
 
 /**

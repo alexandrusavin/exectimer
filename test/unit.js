@@ -1,7 +1,8 @@
 'use strict';
 
-const should = require('should');
+const chai = require('chai');
 const async = require('async');
+const expect = chai.expect;
 
 const t = require('./../index');
 const Tick = t.Tick;
@@ -14,17 +15,18 @@ describe('Unit', function () {
         it('should return a timer object', function () {
             const newTimer = timer('mytimer');
 
-            newTimer.should.be.instanceOf(Object);
+            expect(newTimer).to.be.an.instanceOf(Object);
         });
 
         it('should have all needed helper functions', function () {
             const newTimer = timer('mytimer');
             const helpers = ['median', 'mean', 'duration', 'min', 'max', 'count', 'parse'];
 
-            newTimer.should.be.an.instanceOf(Object).and.have.properties(helpers);
+            expect(newTimer).to.be.an.instanceof(Object)
+                .and.include.keys(helpers);
 
             helpers.forEach(function (helper) {
-                newTimer[helper].should.be.type('function');
+                expect(newTimer[helper]).to.be.a('function');
             });
         });
 
@@ -35,9 +37,9 @@ describe('Unit', function () {
         it('should have helper functions', function () {
             const tick = new Tick('mytick');
 
-            tick.start.should.be.type('function');
-            tick.stop.should.be.type('function');
-            tick.getDiff.should.be.type('function');
+            expect(tick.start).to.be.a('function');
+            expect(tick.stop).to.be.a('function');
+            expect(tick.getDiff).to.be.a('function');
         });
 
         it('should push a new item to the timers array', function () {
@@ -46,7 +48,7 @@ describe('Unit', function () {
             tick.start();
             tick.stop();
 
-            t.timers.mytick.should.be.instanceOf(Object);
+            expect(t.timers.mytick).to.be.an.instanceOf(Object);
         });
 
         context('wrapper', function() {
@@ -55,7 +57,7 @@ describe('Unit', function () {
                     done();
                 });
 
-                tick.should.be.instanceOf(Tick);
+                expect(tick).to.be.an.instanceOf(Tick);
             });
 
             it('should use it\'s name to add it to the timer array', function () {
@@ -63,7 +65,7 @@ describe('Unit', function () {
                     done();
                 });
 
-                t.timers.myFunction.should.be.instanceOf(Object);
+                expect(t.timers.myFunction).to.be.an.instanceOf(Object);
             });
 
             it('should measure all calls', function () {
@@ -76,7 +78,7 @@ describe('Unit', function () {
                     Tick.wrap(myNewFunction);
                 }
 
-                t.timers.myNewFunction.ticks.should.have.lengthOf(10);
+                expect(t.timers.myNewFunction.ticks).to.have.lengthOf(10);
             });
 
             it('should name anonymous functions `anon`', function () {
@@ -84,8 +86,8 @@ describe('Unit', function () {
                     done();
                 });
 
-                t.timers.anon.should.be.instanceOf(Object);
-                t.timers.anon.ticks.should.have.a.lengthOf(1);
+                expect(t.timers.anon).to.be.instanceOf(Object);
+                expect(t.timers.anon.ticks).to.have.a.lengthOf(1);
             });
 
             it('should overwrite function\'s name if set as argument', function () {
@@ -93,10 +95,10 @@ describe('Unit', function () {
                     done();
                 });
 
-                t.timers.anotherFunc.should.be.instanceOf(Object);
-                t.timers.anotherFunc.ticks.should.have.a.lengthOf(1);
+                expect(t.timers.anotherFunc).to.be.instanceOf(Object);
+                expect(t.timers.anotherFunc.ticks).to.have.a.lengthOf(1);
 
-                should.not.exists(t.timers.someFuncNameThatShouldBePicked);
+                expect(t.timers.someFuncNameThatShouldBePicked).to.be.an('undefined');
             });
         });
 
