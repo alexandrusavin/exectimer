@@ -1,6 +1,6 @@
 {
   "name": "exectimer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Very simple module to calculate block execution time.",
   "keywords": [
     "time",
