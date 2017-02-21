@@ -78,4 +78,16 @@ describe('Integration - each 10 loops of 100ms timeouts', function () {
         });
     });
 
+    describe('tick without stop method called', () => {
+        beforeEach(() => {
+            const tick = new Tick('testTickWithoutStopCalled');
+            tick.start();
+        });
+
+        it.only('should not throw', () => {
+            const sut = t.timers.testTickWithoutStopCalled.median.bind(t.timers.testTickWithoutStopCalled);
+
+            should(sut).not.throw();
+        });
+    });
 });

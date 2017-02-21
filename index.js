@@ -182,6 +182,10 @@ Tick.prototype.stop = function () {
  * @returns Long nanoseconds
  */
 Tick.prototype.getDiff = function () {
+    if(!this.hrend) {
+        this.stop();
+    }
+
     return this.hrend[0] * 1e9 + this.hrend[1];
 };
 
