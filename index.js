@@ -63,6 +63,14 @@ const timer = function (name) {
             },
 
             /**
+             * Get the duration of last tick.
+             * @returns {*}
+             */
+            lastTickDuration: function () {
+                return this.ticks[this.ticks.length - 1].getDiff();
+            },
+
+            /**
              * Get the shortest tick.
              * @returns {number}
              */
