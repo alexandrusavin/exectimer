@@ -179,6 +179,9 @@ console.log("It took: " + myTimer.duration());
 #### Timers.TIMER.duration()
  Get the total duration of all ticks.
 
+#### Timers.TIMER.lastTickDuration()
+ Get the duration of last tick.
+
 #### Timers.TIMER.count()
  Get the number of ticks.
 
