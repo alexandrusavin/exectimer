@@ -30,10 +30,10 @@
     "node": ">=4.0.0"
   },
   "devDependencies": {
-    "async": "^1.5.0",
-    "chai": "^3.4.1",
-    "mocha": "^2.3.4",
-    "should": "^7.1.1"
+    "async": "^2.6.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "should": "^13.2.0"
   },
   "dependencies": {
     "co": "^4.6.0"
