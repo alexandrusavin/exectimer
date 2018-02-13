@@ -1,5 +1,6 @@
 'use strict';
 
+const sinon = require('sinon');
 const should = require('should');
 const async = require('async');
 
@@ -8,6 +9,8 @@ const Tick = t.Tick;
 
 const ACCEPTABLE_RESULT_RANGE_MIN = 0.099 * 1e9;
 const ACCEPTABLE_RESULT_RANGE_MAX = 0.108 * 1e9;
+
+const clock = sinon.useFakeTimers();
 
 const suts = {
     testCustomInit: function(n, cb) {
@@ -50,30 +53,27 @@ describe('Integration - each 10 loops of 100ms timeouts', function () {
                 async.times(10, suts[funcName], function () {
                     done();
                 });
+                clock.runAll();
             });
 
-            it('mean should be between 100 and 106 ms', function () {
-                t.timers[funcName].mean().should.be
-                    .lessThan(ACCEPTABLE_RESULT_RANGE_MAX).and.greaterThan(ACCEPTABLE_RESULT_RANGE_MIN);
+            it('mean should be between 100 ms', function () {
+                t.timers[funcName].mean().should.equal(100000000);
             });
 
-            it('median should be between 100 and 106 ms', function () {
-                t.timers[funcName].median().should.be
-                    .lessThan(ACCEPTABLE_RESULT_RANGE_MAX).and.greaterThan(ACCEPTABLE_RESULT_RANGE_MIN);
+            it('median should be between 100', function () {
+                t.timers[funcName].median().should.equal(100000000);
             });
 
             it('min should be between 100 and 106 ms', function () {
-                t.timers[funcName].min().should.be
-                    .lessThan(ACCEPTABLE_RESULT_RANGE_MAX).and.greaterThan(ACCEPTABLE_RESULT_RANGE_MIN);
+                t.timers[funcName].min().should.equal(100000000);
             });
 
-            it('max should be between 100 and 108 ms', function () {
-                t.timers[funcName].max().should.be
-                    .lessThan(ACCEPTABLE_RESULT_RANGE_MAX).and.greaterThan(ACCEPTABLE_RESULT_RANGE_MIN);
+            it('max should be between 100', function () {
+                t.timers[funcName].max().should.equal(100000000);
             });
 
             it('count should be 10', function () {
-                t.timers[funcName].count().should.be.equal(10);
+                t.timers[funcName].count().should.equal(10);
             });
         });
     });
