@@ -51,7 +51,7 @@ describe('Unit', function () {
             expect(t.timers.mytick).to.be.an.instanceOf(Object);
         });
 
-        context('wrapper', function() {
+        context('wrapper', function () {
 
             it('should use function\'s name to add it to the timer array', function () {
                 Tick.wrap(function myFunction(done) {
@@ -99,6 +99,10 @@ describe('Unit', function () {
                 expect(t.timers.anotherFunc.ticks).to.have.a.lengthOf(1);
 
                 expect(t.timers.someFuncNameThatShouldBePicked).to.be.an('undefined');
+            });
+
+            it('should throw if parameters are wrong', function () {
+                expect(() => Tick.wrap('anotherFunc')).to.throw('Tick.wrap expects a callback function parameter');
             });
         });
 

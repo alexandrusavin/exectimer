@@ -169,9 +169,8 @@ Tick.wrap = function (name, callback) {
         // If done is passed when the callback is declared than we assume is async
         return callback(done);
     } else {
-        // Otherwise just call the function and stop the tick
-        tick.stop();
-        return callback();
+        // Callback is not a function which is not permitted
+        throw new Error('Tick.wrap expects a callback function parameter');
     }
 };
 
