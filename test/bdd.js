@@ -1,7 +1,10 @@
 'use strict';
 
+const sinon = require('sinon');
 const chai = require('chai');
+const sinonChai = require('sinon-chai');
 
+chai.use(sinonChai);
 const expect = chai.expect;
 
 const timer = require('../index').timer;
@@ -24,7 +27,7 @@ const getTimerWithTicks = function (name, diffs) {
 
 describe('BDD', function () {
 
-    describe('Helpers', function() {
+    describe('Helpers', function () {
         describe('median', function () {
 
             it('should calculate the median correctly for a timer containing 1 tick', function () {
@@ -156,17 +159,35 @@ describe('BDD', function () {
             });
 
         });
+
+        describe('printResults', function () {
+            it('should print the results nicely', function () {
+                sinon.spy(console, 'log');
+
+                const medianTestTimerWith6Ticks = getTimerWithTicks('medianTestTimerWith6Ticks', [1, 4, 6, 7, 9, 10]);
+                ['parse', 'duration', 'min', 'max', 'mean', 'median']
+                    .forEach(method => sinon.spy(medianTestTimerWith6Ticks, method));
+
+                medianTestTimerWith6Ticks.printResults();
+
+                expect(console.log).to.have.callCount(5);
+                expect(medianTestTimerWith6Ticks.parse).to.have.callCount(5);
+                expect(medianTestTimerWith6Ticks.duration).to.have.callCount(2);
+                ['min', 'max', 'mean', 'median']
+                    .forEach(method => expect(medianTestTimerWith6Ticks[method]).to.have.callCount(1));
+            });
+        });
     });
 
-    context('Generators', function() {
+    context('Generators', function () {
         var prom;
         const Tick = require('../index').Tick;
 
-        beforeEach(function() {
+        beforeEach(function () {
             prom = '';
         });
 
-        it('should resolve promises', function(done) {
+        it('should resolve promises', function (done) {
             Tick.wrap('myOtherFunc', function* () {
                 prom = yield Promise.resolve('foo');
 
@@ -175,16 +196,15 @@ describe('BDD', function () {
             });
         });
 
-        it('should catch promises that do not succeed', function(done) {
+        it('should catch promises that do not succeed', function (done) {
             Tick.wrap('myOtherFunc', function* () {
                 try {
                     yield Promise.reject(new Error('foo'));
-                } catch(e) {
+                } catch (e) {
                     expect(e.message).to.equal('foo');
                     done();
                 }
             });
         });
     });
-
 });

@@ -107,14 +107,27 @@ const timer = function (name) {
              */
             parse: function (num) {
                 if (num < 1e3) {
-                    return num + 'ns';
+                    return num + ' ns';
                 } else if (num >= 1e3 && num < 1e6) {
-                    return num / 1e3 + 'us';
+                    return num / 1e3 + ' us';
                 } else if (num >= 1e6 && num < 1e9) {
-                    return num / 1e6 + 'ms';
+                    return num / 1e6 + ' ms';
                 } else if (num >= 1e9) {
-                    return num / 1e9 + 's';
+                    return num / 1e9 + ' s';
                 }
+            },
+
+            /**
+             * Utility function that prints all indicators.
+             *
+             * @returns undefined
+             */
+            printResults: function () {
+              console.log('Total duration: %s', this.parse(this.duration()));
+              console.log('Min: %s', this.parse(this.min()));
+              console.log('Max: %s', this.parse(this.max()));
+              console.log('Mean: %s', this.parse(this.mean()));
+              console.log('Median: %s', this.parse(this.median()));
             }
         };
     }
