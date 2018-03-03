@@ -1,5 +1,6 @@
 'use strict';
 
+const hrtime = require('browser-process-hrtime')
 const co = require('co');
 
 /**
@@ -178,7 +179,7 @@ Tick.wrap = function (name, callback) {
  * Starts the tick.
  */
 Tick.prototype.start = function () {
-    this.hrstart = process.hrtime();
+    this.hrstart = hrtime();
     timer(this.name).ticks.push(this);
 };
 
@@ -186,7 +187,7 @@ Tick.prototype.start = function () {
  * Ends the tick.
  */
 Tick.prototype.stop = function () {
-    this.hrend = process.hrtime(this.hrstart);
+    this.hrend = hrtime(this.hrstart);
 };
 
 /**
