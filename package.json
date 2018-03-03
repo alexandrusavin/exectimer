@@ -37,6 +37,7 @@
     "sinon-chai": "^3.0.0"
   },
   "dependencies": {
+    "browser-process-hrtime": "^0.1.2",
     "co": "^4.6.0"
   }
 }
