@@ -1,7 +1,6 @@
 'use strict';
 
 const chai = require('chai');
-const async = require('async');
 const expect = chai.expect;
 
 const t = require('./../index');
