@@ -1,14 +1,9 @@
-'use strict';
-
 const sinon = require('sinon');
 const should = require('should');
 const async = require('async');
 
 const t = require('./../index');
 const Tick = t.Tick;
-
-const ACCEPTABLE_RESULT_RANGE_MIN = 0.099 * 1e9;
-const ACCEPTABLE_RESULT_RANGE_MAX = 0.108 * 1e9;
 
 const clock = sinon.useFakeTimers();
 
