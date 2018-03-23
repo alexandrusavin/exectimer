@@ -23,8 +23,7 @@
   },
   "main": "./index",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/**/*.js",
-    "jshint": "jshint --config .jshintrc --exclude node_modules *.js"
+    "test": "./node_modules/.bin/mocha test/**/*.js"
   },
   "engines": {
     "node": ">=4.0.0"
