@@ -48,6 +48,12 @@ describe('BDD', function () {
                 expect(medianTestTimerWith6Ticks.median()).to.equal(6.5);
             });
 
+            it('should calculate the median correctly for a timer containing 6 tick not ordered', function () {
+                const medianTestTimerWith6Ticks = getTimerWithTicks('medianTestTimerWith6Ticks', [4, 1, 10, 9, 6, 7]);
+
+                expect(medianTestTimerWith6Ticks.median()).to.equal(6.5);
+            });
+
         });
 
         describe('mean', function () {
@@ -66,6 +72,12 @@ describe('BDD', function () {
 
             it('should calculate the mean correctly for a timer containing 6 tick', function () {
                 const meanTestTimerWith6Ticks = getTimerWithTicks('meanTestTimerWith6Ticks', [1, 4, 6, 7, 9, 10]);
+
+                expect(meanTestTimerWith6Ticks.mean()).to.equal(6.166666666666667);
+            });
+
+            it('should calculate the mean correctly for a timer containing 6 tick not ordered', function () {
+                const meanTestTimerWith6Ticks = getTimerWithTicks('meanTestTimerWith6Ticks', [4, 1, 10, 9, 6, 7]); 
 
                 expect(meanTestTimerWith6Ticks.mean()).to.equal(6.166666666666667);
             });
