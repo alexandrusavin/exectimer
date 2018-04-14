@@ -1,11 +1,13 @@
 const sinon = require('sinon');
-const should = require('should');
+const chai = require('chai');
 const async = require('async');
 
-const t = require('./../index');
-const Tick = t.Tick;
-
 const clock = sinon.useFakeTimers();
+
+const exectimer = require('./../index');
+const Tick = exectimer.Tick;
+
+const expect = chai.expect;
 
 const suts = {
     testCustomInit: function(n, cb) {
@@ -52,37 +54,38 @@ describe('Integration - each 10 loops of 100ms timeouts', function () {
             });
 
             it('mean should be between 100 ms', function () {
-                t.timers[funcName].mean().should.equal(100000000);
+                expect(exectimer.timers[funcName].mean()).to.equal(100000000);
             });
 
             it('median should be between 100', function () {
-                t.timers[funcName].median().should.equal(100000000);
+                expect(exectimer.timers[funcName].median()).to.equal(100000000);
             });
 
             it('min should be between 100 and 106 ms', function () {
-                t.timers[funcName].min().should.equal(100000000);
+                expect(exectimer.timers[funcName].min()).to.equal(100000000);
             });
 
             it('max should be between 100', function () {
-                t.timers[funcName].max().should.equal(100000000);
+                expect(exectimer.timers[funcName].max()).to.equal(100000000);
             });
 
             it('count should be 10', function () {
-                t.timers[funcName].count().should.equal(10);
+                expect(exectimer.timers[funcName].count()).to.equal(10);
             });
         });
     });
 
     describe('tick without stop method called', () => {
+        const functionName = 'testTickWithoutStopCalled';
         beforeEach(() => {
-            const tick = new Tick('testTickWithoutStopCalled');
+            const tick = new Tick(functionName);
             tick.start();
         });
 
         it('should not throw', () => {
-            const sut = t.timers.testTickWithoutStopCalled.median.bind(t.timers.testTickWithoutStopCalled);
+            const sut = exectimer.timers[functionName].median.bind(exectimer.timers.testTickWithoutStopCalled);
 
-            should(sut).not.throw();
+            expect(sut).to.not.throw();
         });
     });
 });

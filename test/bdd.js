@@ -77,7 +77,7 @@ describe('BDD', function () {
             });
 
             it('should calculate the mean correctly for a timer containing 6 tick not ordered', function () {
-                const meanTestTimerWith6Ticks = getTimerWithTicks('meanTestTimerWith6Ticks', [4, 1, 10, 9, 6, 7]); 
+                const meanTestTimerWith6Ticks = getTimerWithTicks('meanTestTimerWith6Ticks', [4, 1, 10, 9, 6, 7]);
 
                 expect(meanTestTimerWith6Ticks.mean()).to.equal(6.166666666666667);
             });
