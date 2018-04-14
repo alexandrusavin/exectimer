@@ -30,7 +30,7 @@
     "test": "npm run test-unit && npm run test-bdd && npm run test-int && npm run test-browser"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "devDependencies": {
     "async": "^2.6.0",
