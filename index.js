@@ -1,5 +1,6 @@
 'use strict';
 
+const hrtime = require('browser-process-hrtime')
 const co = require('co');
 const hrtime = require('browser-process-hrtime');
 
