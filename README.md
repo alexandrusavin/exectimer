@@ -1,11 +1,9 @@
 Description
 -----------
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/alexandrusavin/exectimer.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/alexandrusavin/exectimer.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
 
 Very simple but powerful nodejs and browser module build to track execution time with a resolution of nanoseconds.
-
-[![Build Status](https://travis-ci.org/alexandrusavin/exectimer.png?branch=master)](https://travis-ci.org/alexandrusavin/exectimer)
 
 Install
 -------
