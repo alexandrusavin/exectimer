@@ -51,7 +51,7 @@
     "webpack": "^4.11.1"
   },
   "dependencies": {
-    "browser-process-hrtime": "^0.1.2",
+    "browser-process-hrtime": "^1.0.0",
     "co": "^4.6.0"
   }
 }
