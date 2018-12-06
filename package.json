@@ -2,6 +2,7 @@
   "name": "exectimer",
   "version": "2.2.1",
   "description": "Very simple module to calculate block execution time.",
+  "license": "MIT",
   "keywords": [
     "time",
     "timer",
