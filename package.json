@@ -49,7 +49,7 @@
     "mocha": "^5.0.0",
     "sinon": "^6.0.1",
     "sinon-chai": "^3.0.0",
-    "webpack": "^4.11.1"
+    "webpack": "^4.34.0"
   },
   "dependencies": {
     "browser-process-hrtime": "^1.0.0",
