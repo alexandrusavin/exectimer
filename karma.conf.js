@@ -1,3 +1,5 @@
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+
 module.exports = (config) => {
     config.set({
         basePath: 'test',
@@ -10,7 +12,10 @@ module.exports = (config) => {
         },
         reporters: ['progress', 'mocha'],
         webpack: {
-            devtool: 'inline-source-map'
+            devtool: 'inline-source-map',
+            plugins: [
+                new NodePolyfillPlugin(),
+            ]
         },
         port: 9876,
         colors: true,
@@ -22,5 +27,8 @@ module.exports = (config) => {
         },
         browsers: ['Chrome_travis_ci'],
         singleRun: true,
+        stats: {
+            errorDetails: true
+        }
     });
 };
