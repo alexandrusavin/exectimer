@@ -57,6 +57,20 @@ describe('Browser-like environment (no process.hrtime)', function () {
         expect(tick.getDiff()).to.be.closeTo(0.2e6, 1e3);
     });
 
+    it('should keep using the performance.now() found at load time (like browser-process-hrtime)', function () {
+        const performance = fakePerformance([100, 300]);
+        const exectimer = loadWithoutProcess({performance: performance});
+        performance.now = function () {
+            return 0;
+        };
+        const tick = new exectimer.Tick('browserLoadTime');
+
+        tick.start();
+        tick.stop();
+
+        expect(tick.getDiff()).to.be.closeTo(200e6, 1e3);
+    });
+
     it('should fall back to Date when performance is not available', function () {
         const exectimer = loadWithoutProcess({});
         const tick = new exectimer.Tick('dateTick');

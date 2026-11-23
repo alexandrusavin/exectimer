@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: 24.x
           registry-url: https://registry.npmjs.org
+      - name: Use an npm that supports trusted publishing (>= 11.5.1)
+        run: npm install -g npm@^11.5.1
       - run: npm ci
       - run: npm test
       - run: npm publish
