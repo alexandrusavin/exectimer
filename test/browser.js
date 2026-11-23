@@ -6,17 +6,19 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
+const {createRequire} = require('module');
 const expect = require('chai').expect;
 
 const file = path.join(__dirname, '..', 'index.js');
 const source = fs.readFileSync(file, 'utf8');
+const requireFromIndex = createRequire(file);
 
 function loadWithoutProcess(globals) {
     const mod = {exports: {}};
     const sandbox = Object.assign({console: console, setTimeout: setTimeout, Promise: Promise}, globals);
     const wrapper = '(function (module, exports, require) {' + source + '\n})';
 
-    vm.runInNewContext(wrapper, sandbox, {filename: file})(mod, mod.exports, require);
+    vm.runInNewContext(wrapper, sandbox, {filename: file})(mod, mod.exports, requireFromIndex);
 
     return mod.exports;
 }
