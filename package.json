@@ -24,7 +24,8 @@
   },
   "main": "./index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "vendor/co.js"
   ],
   "scripts": {
     "test-unit": "mocha test/unit.js",
@@ -42,8 +43,5 @@
     "mocha": "^12.0.3",
     "sinon": "^22.1.0",
     "sinon-chai": "^3.7.0"
-  },
-  "dependencies": {
-    "co": "^4.6.0"
   }
 }
