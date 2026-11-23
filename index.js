@@ -1,7 +1,16 @@
 'use strict';
 
 const co = require('co');
-const hrtime = require('browser-process-hrtime');
+
+/**
+ * High-resolution clock with the same contract as Node's `process.hrtime([prev])`:
+ * returns `[seconds, nanoseconds]`, or the difference to `prev` when given.
+ * Uses `process.hrtime` in Node and falls back to `performance.now()` (or `Date.now()`)
+ * elsewhere. Resolved once at load time, exactly like browser-process-hrtime did.
+ */
+const hrtime = (typeof process !== 'undefined' && process && typeof process.hrtime === 'function')
+    ? process.hrtime
+    : browserHrtime;
 
 /**
  * Contains all timers.
@@ -38,9 +47,11 @@ const timer = function (name) {
                     } else {
                         return (sorted[half - 1].getDiff() + sorted[half].getDiff()) / 2;
                     }
-                } else {
+                } else if (this.ticks.length === 1) {
                     return this.ticks[0].getDiff();
                 }
+
+                return 0;
             },
 
             /**
@@ -68,6 +79,10 @@ const timer = function (name) {
              * @returns {number}
              */
             min: function () {
+                if (this.ticks.length === 0) {
+                    return 0;
+                }
+
                 let min = this.ticks[0].getDiff();
                 this.ticks.forEach(function (tick) {
                     if (tick.getDiff() < min) {
@@ -99,6 +114,14 @@ const timer = function (name) {
              */
             count: function () {
                 return Object.keys(this.ticks).length;
+            },
+
+            /**
+             * Remove all recorded ticks from this timer.
+             * @returns undefined
+             */
+            reset: function () {
+                this.ticks.length = 0;
             },
 
             /**
@@ -150,11 +173,17 @@ function Tick(name) {
 Tick.wrap = function (name, callback) {
     if (typeof name === 'function') {
         callback = name;
-        name = functionName(callback);
+        // Async functions are new in 2.3, so they get the reliable `fn.name`; other functions keep
+        // the 2.x source-parsing behaviour so existing timer names don't change.
+        name = isAsyncFunction(callback) ? callback.name : functionName(callback);
     }
 
     if (name === '') {
         name = 'anon';
+    }
+
+    if (!isFunction(callback)) {
+        throw new Error('Tick.wrap expects a callback function parameter');
     }
 
     const tick = new Tick(name);
@@ -164,15 +193,37 @@ Tick.wrap = function (name, callback) {
         tick.stop();
     };
 
+    // Stops the tick unless `done` already did.
+    const settle = function () {
+        if (!tick.hrend) {
+            tick.stop();
+        }
+    };
+
     if (isGeneratorFunction(callback)) {
         return co(callback).then(done, done);
-    } else if(isFunction(callback)) {
-        // If done is passed when the callback is declared than we assume is async
-        return callback(done);
-    } else {
-        // Callback is not a function which is not permitted
-        throw new Error('Tick.wrap expects a callback function parameter');
     }
+
+    let result;
+    try {
+        result = callback(done);
+    } catch (err) {
+        settle();
+        throw err;
+    }
+
+    // `async` functions are stopped when their promise settles; value and error are passed through.
+    if (isAsyncFunction(callback) && result && typeof result.then === 'function') {
+        return result.then(function (value) {
+            settle();
+            return value;
+        }, function (err) {
+            settle();
+            throw err;
+        });
+    }
+
+    return result;
 };
 
 /**
@@ -232,6 +283,15 @@ function isGeneratorFunction(value) {
 }
 
 /**
+ * Check if `value` is a native `async` function.
+ * @param value
+ * @returns {boolean}
+ */
+function isAsyncFunction(value) {
+    return Object.prototype.toString.call(value) === '[object AsyncFunction]';
+}
+
+/**
  * Helper function used to check is argument is of type function
  * @author https://github.com/lodash/lodash/blob/4.16.4/lodash.js#L11590
  * @param value
@@ -241,7 +301,8 @@ function isFunction(value) {
     // The use of `Object#toString` avoids issues with the `typeof` operator
     // in Safari 9 which returns 'object' for typed array and other constructors.
     var tag = isObject(value) ? Object.prototype.toString.call(value) : '';
-    return tag == '[object Function]' || tag == '[object GeneratorFunction]' || tag == '[object Proxy]';
+    return tag == '[object Function]' || tag == '[object GeneratorFunction]' ||
+        tag == '[object AsyncFunction]' || tag == '[object Proxy]';
 }
 
 /**
@@ -253,4 +314,42 @@ function isFunction(value) {
 function isObject(value) {
     var type = typeof value;
     return value != null && (type == 'object' || type == 'function');
+}
+
+/**
+ * `process.hrtime` fallback for browsers, based on `performance.now()`.
+ *
+ * Inlined from browser-process-hrtime@1.0.0 (https://github.com/kumavis/browser-process-hrtime):
+ *
+ * Copyright 2014 kumavis
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @param {Array} [previousTimestamp]
+ * @returns {Array} [seconds, nanoseconds]
+ */
+function browserHrtime(previousTimestamp) {
+    const perf = (typeof performance !== 'undefined' && performance && typeof performance.now === 'function')
+        ? performance
+        : null;
+    const clocktime = (perf ? perf.now() : new Date().getTime()) * 1e-3;
+    let seconds = Math.floor(clocktime);
+    let nanoseconds = Math.floor((clocktime % 1) * 1e9);
+
+    if (previousTimestamp) {
+        seconds = seconds - previousTimestamp[0];
+        nanoseconds = nanoseconds - previousTimestamp[1];
+        if (nanoseconds < 0) {
+            seconds--;
+            nanoseconds += 1e9;
+        }
+    }
+
+    return [seconds, nanoseconds];
 }
