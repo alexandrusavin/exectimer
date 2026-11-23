@@ -22,7 +22,10 @@ No breaking changes to the public API.
 ### Changed
 - Removed the `browser-process-hrtime` dependency; the same fallback is now inlined, with identical
   behaviour (including resolving `performance.now` once at load time).
-- The published package only contains `index.js`, `README.md`, `LICENSE` and `package.json`.
+- Removed the `co` dependency; `co@4.6.0` is vendored unchanged in `vendor/co.js` (MIT licence kept).
+  exectimer now has no runtime dependencies.
+- The published package only contains `index.js`, `vendor/co.js`, `README.md`, `LICENSE` and
+  `package.json`.
 - Tooling: CI on GitHub Actions for Node 22, 24 and 26; Mocha 12, Sinon 22; Karma, Webpack, Babel,
   Travis and Greenkeeper removed. The browser path is tested by running the module in a sandbox
   without `process`.
@@ -31,4 +34,4 @@ No breaking changes to the public API.
 ### Planned for 3.0 (breaking)
 - Stop synchronous callbacks that don't take `done` immediately (today they run until first read).
 - Name all functions via `fn.name` (arrow functions and methods are currently misnamed).
-- Drop generator support and the `co` dependency; ship ESM + CJS and TypeScript types.
+- Drop generator support (and the vendored `co`); ship ESM + CJS and TypeScript types.

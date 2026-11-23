@@ -1,6 +1,6 @@
 'use strict';
 
-const co = require('co');
+const co = require('./vendor/co');
 
 /**
  * High-resolution clock with the same contract as Node's `process.hrtime([prev])`:
