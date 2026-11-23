@@ -49,7 +49,7 @@ describe('BDD', function () {
             });
 
             it('should calculate the median correctly for a timer containing 6 tick not ordered', function () {
-                const medianTestTimerWith6Ticks = getTimerWithTicks('medianTestTimerWith6Ticks', [4, 1, 10, 9, 6, 7]);
+                const medianTestTimerWith6Ticks = getTimerWithTicks('medianTestTimerWith6TicksNotOrdered', [4, 1, 10, 9, 6, 7]);
 
                 expect(medianTestTimerWith6Ticks.median()).to.equal(6.5);
             });
@@ -77,7 +77,7 @@ describe('BDD', function () {
             });
 
             it('should calculate the mean correctly for a timer containing 6 tick not ordered', function () {
-                const meanTestTimerWith6Ticks = getTimerWithTicks('meanTestTimerWith6Ticks', [4, 1, 10, 9, 6, 7]);
+                const meanTestTimerWith6Ticks = getTimerWithTicks('meanTestTimerWith6TicksNotOrdered', [4, 1, 10, 9, 6, 7]);
 
                 expect(meanTestTimerWith6Ticks.mean()).to.equal(6.166666666666667);
             });
@@ -172,11 +172,44 @@ describe('BDD', function () {
 
         });
 
-        describe('printResults', function () {
-            it('should print the results nicely', function () {
-                sinon.spy(console, 'log');
+        describe('empty timer', function () {
+            const emptyTimer = timer('emptyTestTimer');
 
-                const medianTestTimerWith6Ticks = getTimerWithTicks('medianTestTimerWith6Ticks', [1, 4, 6, 7, 9, 10]);
+            it('should return 0 for min, max, median and duration instead of throwing', function () {
+                expect(emptyTimer.min()).to.equal(0);
+                expect(emptyTimer.max()).to.equal(0);
+                expect(emptyTimer.median()).to.equal(0);
+                expect(emptyTimer.duration()).to.equal(0);
+                expect(emptyTimer.count()).to.equal(0);
+            });
+
+            it('should keep returning NaN for mean (unchanged from 2.2)', function () {
+                expect(emptyTimer.mean()).to.be.NaN;
+            });
+        });
+
+        describe('reset', function () {
+            it('should remove all ticks but keep the same timer and ticks array', function () {
+                const resetTimer = getTimerWithTicks('resetTestTimer', [1, 2, 3]);
+                const ticks = resetTimer.ticks;
+
+                resetTimer.reset();
+
+                expect(resetTimer.count()).to.equal(0);
+                expect(resetTimer.ticks).to.equal(ticks);
+                expect(timer('resetTestTimer')).to.equal(resetTimer);
+            });
+        });
+
+        describe('printResults', function () {
+            afterEach(function () {
+                sinon.restore();
+            });
+
+            it('should print the results nicely', function () {
+                sinon.stub(console, 'log');
+
+                const medianTestTimerWith6Ticks = getTimerWithTicks('printResultsTestTimer', [1, 4, 6, 7, 9, 10]);
                 ['parse', 'duration', 'min', 'max', 'mean', 'median']
                     .forEach(method => sinon.spy(medianTestTimerWith6Ticks, method));
 

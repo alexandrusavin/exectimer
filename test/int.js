@@ -30,6 +30,13 @@ const suts = {
             });
         });
     },
+    testWrapAsyncFunction: function(n, cb) {
+        Tick.wrap('testWrapAsyncFunction', async () => {
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 100);
+            });
+        }).then(() => cb());
+    },
     testWrapGenerator: function(n, cb) {
         Tick.wrap('testWrapGenerator', function* () {
             yield new Promise(function(resolve) {

@@ -19,7 +19,7 @@ describe('Unit', function () {
 
         it('should have all needed helper functions', function () {
             const newTimer = timer('mytimer');
-            const helpers = ['median', 'mean', 'duration', 'min', 'max', 'count', 'parse'];
+            const helpers = ['median', 'mean', 'duration', 'min', 'max', 'count', 'parse', 'reset'];
 
             expect(newTimer).to.be.an.instanceof(Object)
                 .and.include.keys(helpers);
@@ -102,6 +102,91 @@ describe('Unit', function () {
 
             it('should throw if parameters are wrong', function () {
                 expect(() => Tick.wrap('anotherFunc')).to.throw('Tick.wrap expects a callback function parameter');
+            });
+
+            it('should not register a tick when the callback is invalid', function () {
+                expect(() => Tick.wrap('invalidCallbackTimer', 42)).to.throw();
+                expect(t.timers.invalidCallbackTimer).to.be.an('undefined');
+            });
+
+            it('should rethrow errors from the callback and stop the tick', function () {
+                const error = new Error('boom');
+
+                expect(() => Tick.wrap('throwingFunc', function () {
+                    throw error;
+                })).to.throw(error);
+
+                expect(t.timers.throwingFunc.ticks).to.have.lengthOf(1);
+                expect(t.timers.throwingFunc.ticks[0].hrend).to.be.an('array');
+            });
+
+            it('should keep the time recorded by done() if the callback throws afterwards', function () {
+                expect(() => Tick.wrap('doneThenThrowFunc', function (done) {
+                    done();
+                    throw new Error('late');
+                })).to.throw('late');
+
+                const tick = t.timers.doneThenThrowFunc.ticks[0];
+                const recorded = tick.hrend;
+                expect(recorded).to.be.an('array');
+                expect(tick.hrend).to.equal(recorded);
+            });
+
+            context('async functions', function () {
+
+                it('should accept an async function and name it', function () {
+                    const result = Tick.wrap(async function myAsyncFunction() {
+                        return 'ok';
+                    });
+
+                    expect(result).to.be.a('promise');
+                    expect(t.timers.myAsyncFunction).to.be.an.instanceOf(Object);
+                    return result;
+                });
+
+                it('should resolve with the value of the async function', async function () {
+                    const value = await Tick.wrap('asyncValue', async () => 42);
+
+                    expect(value).to.equal(42);
+                });
+
+                it('should stop the tick when the promise resolves', async function () {
+                    await Tick.wrap('asyncTiming', async () => {
+                        await new Promise((resolve) => setTimeout(resolve, 20));
+                    });
+
+                    const tick = t.timers.asyncTiming.ticks[0];
+                    expect(tick.hrend).to.be.an('array');
+                    expect(tick.getDiff()).to.be.at.least(15e6).and.below(1e9);
+                });
+
+                it('should pass rejections through and still stop the tick', async function () {
+                    const error = new Error('nope');
+                    let caught;
+
+                    try {
+                        await Tick.wrap('asyncRejection', async () => {
+                            throw error;
+                        });
+                    } catch (e) {
+                        caught = e;
+                    }
+
+                    expect(caught).to.equal(error);
+                    expect(t.timers.asyncRejection.ticks[0].hrend).to.be.an('array');
+                });
+
+                it('should honour done() when an async function asks for it', async function () {
+                    let tick;
+
+                    await Tick.wrap('asyncWithDone', async (done) => {
+                        tick = t.timers.asyncWithDone.ticks[0];
+                        done();
+                        await new Promise((resolve) => setTimeout(resolve, 20));
+                    });
+
+                    expect(tick.getDiff()).to.be.below(15e6);
+                });
             });
         });
 
