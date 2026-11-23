@@ -20,7 +20,8 @@ No breaking changes to the public API.
   (e.g. webpack 5).
 
 ### Changed
-- Removed the `browser-process-hrtime` dependency; the same fallback is now inlined.
+- Removed the `browser-process-hrtime` dependency; the same fallback is now inlined, with identical
+  behaviour (including resolving `performance.now` once at load time).
 - The published package only contains `index.js`, `README.md`, `LICENSE` and `package.json`.
 - Tooling: CI on GitHub Actions for Node 22, 24 and 26; Mocha 12, Sinon 22; Karma, Webpack, Babel,
   Travis and Greenkeeper removed. The browser path is tested by running the module in a sandbox

@@ -6,11 +6,24 @@ const co = require('co');
  * High-resolution clock with the same contract as Node's `process.hrtime([prev])`:
  * returns `[seconds, nanoseconds]`, or the difference to `prev` when given.
  * Uses `process.hrtime` in Node and falls back to `performance.now()` (or `Date.now()`)
- * elsewhere. Resolved once at load time, exactly like browser-process-hrtime did.
+ * elsewhere.
  */
 const hrtime = (typeof process !== 'undefined' && process && typeof process.hrtime === 'function')
     ? process.hrtime
     : browserHrtime;
+
+// Resolved once at load time, like browser-process-hrtime: replacing `performance.now` later
+// (e.g. fake timers in a test) does not affect measurements.
+const browserPerformance = (typeof performance !== 'undefined' && performance) || {};
+const performanceNow =
+    browserPerformance.now ||
+    browserPerformance.mozNow ||
+    browserPerformance.msNow ||
+    browserPerformance.oNow ||
+    browserPerformance.webkitNow ||
+    function () {
+        return new Date().getTime();
+    };
 
 /**
  * Contains all timers.
@@ -335,10 +348,7 @@ function isObject(value) {
  * @returns {Array} [seconds, nanoseconds]
  */
 function browserHrtime(previousTimestamp) {
-    const perf = (typeof performance !== 'undefined' && performance && typeof performance.now === 'function')
-        ? performance
-        : null;
-    const clocktime = (perf ? perf.now() : new Date().getTime()) * 1e-3;
+    const clocktime = performanceNow.call(browserPerformance) * 1e-3;
     let seconds = Math.floor(clocktime);
     let nanoseconds = Math.floor((clocktime % 1) * 1e9);
 
